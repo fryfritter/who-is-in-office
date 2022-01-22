@@ -32,7 +32,7 @@ class Cal extends React.Component {
 
   async loadStaff() {
     // const url = api.staffApi + "/staffList";
-    const url = "http://localhost:4000/api/staff/staffList";
+    const url = `${process.env.REACT_APP_API_URL}/api/staff/staffList`;
 
     let resp = await axios.get(url, {});
     // allStaff = resp.data;
@@ -46,7 +46,7 @@ class Cal extends React.Component {
 
   async loadStaffSchedule(dateFrom, dateTo) {
     // const url = api.staffApi + "/staffList";
-    const url = "http://localhost:4000/api/staff/staffSchedule";
+    const url = `${process.env.REACT_APP_API_URL}/api/staff/staffSchedule`;
 
     let resp = await axios.get(url, { dateFrom, dateTo });
     // allStaff = resp.data;
