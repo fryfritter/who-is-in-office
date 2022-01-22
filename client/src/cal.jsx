@@ -193,7 +193,7 @@ class Cal extends React.Component {
 
   addSchedule = async (staffId, officeOn) => {
     console.log("add now", staffId, officeOn);
-    const url = "http://localhost:4000/api/staff/addSchedule";
+    const url = `${process.env.REACT_APP_API_URL}/api/staff/addSchedule`;
     let resp = await axios.post(url, { staffId, officeOn });
     console.log("response ", resp.data);
     //call reload schedule
@@ -202,7 +202,7 @@ class Cal extends React.Component {
 
   deleteSchedule = async (staffId, officeOn) => {
     console.log("remove now", staffId, officeOn);
-    const url = "http://localhost:4000/api/staff/deleteSchedule";
+    const url = `${process.env.REACT_APP_API_URL}/api/staff/deleteSchedule`;
     let resp = await axios.post(url, { staffId, officeOn });
     console.log("response ", resp.data);
     //call reload schedule
