@@ -1,4 +1,5 @@
 require("dotenv").config();
+const cookieParser = require("cookie-parser");
 const express = require("express");
 const db = require("./db/models/index");
 const path = require("path"); // for deployment to client
@@ -7,6 +8,8 @@ const apiRouter = express.Router(); // for deployment to client
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
+
 db.sequelize.sync();
 
 const cors = require("cors");
@@ -17,6 +20,12 @@ app.use(
     credentials: true,
   })
 );
+
+app.use("/api", apiRouter); // for deployment to client
+
+apiRouter.get("/", function (req, res) {
+  res.send("Hello World!");
+});
 
 app.use("/api", apiRouter); // for deployment to client
 const staffRouter = require("./src/routes/staff.route");
