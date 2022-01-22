@@ -5,7 +5,7 @@ const db = require("../../db/models/index");
 router.get("/staffList", async (req, res) => {
   try {
     console.log("Staff Route Get all");
-    const staff = await db.staffs.findAll({
+    const staff = await db.staff.findAll({
       attributes: ["name", "id"],
     });
     res.json(staff);

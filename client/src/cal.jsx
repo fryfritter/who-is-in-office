@@ -23,6 +23,7 @@ class Cal extends React.Component {
     staffSchedule: [],
     isScheduleLoading: true,
   };
+  dailyCount = [2, 0, 0, 0, 0, 0, 0];
 
   componentDidMount() {
     this.loadStaff();
@@ -94,9 +95,12 @@ class Cal extends React.Component {
 
     let startDate = startOfWeek(this.state.currentWeek);
 
-    days.push(<div className="col col-center">Staff Name</div>);
+    days.push(<div className="col col-start">Staff Name</div>);
     for (let i = 1; i < 8; i++) {
-      this.daysOfWeek.push(format(addDays(startDate, i), dateMonthYearFormat));
+      this.daysOfWeek.push({
+        date: format(addDays(startDate, i), dateMonthYearFormat),
+        officeCount: 0,
+      });
       days.push(
         <div className="col col-center" key={i}>
           {format(addDays(startDate, i), dateFormat)} <br></br>
@@ -108,6 +112,20 @@ class Cal extends React.Component {
     return <div className="row blue">{days}</div>;
   }
 
+  renderDailyCount() {
+    const dayCount = [];
+    dayCount.push(<div className="col col-start">-</div>);
+
+    for (let i = 0; i < 7; i++) {
+      dayCount.push(
+        <div className="col col-center" key={i}>
+          {this.dailyCount[i]}
+        </div>
+      );
+    }
+
+    return <div className="row blue">{dayCount}</div>;
+  }
   renderSchedules() {
     // const allStaff2 = ["Bruce", "Clark", "Diana"];
     console.log("Before calling load staff in schedule");
@@ -119,9 +137,7 @@ class Cal extends React.Component {
       staffSchedules = this.state.allStaff.map((staff) => {
         let rowDetails = [];
 
-        console.log("calling me -", staff);
-
-        rowDetails.push(<div className="col cell">{staff.name}</div>);
+        rowDetails.push(<div className="col  col-start">{staff.name}</div>);
 
         console.log("now in days of week", this.state.staffSchedule);
 
@@ -129,23 +145,24 @@ class Cal extends React.Component {
           let filtered = this.state.staffSchedule.filter(
             (schedule) =>
               schedule.staffId === staff.id &&
-              format(new Date(schedule.officeOn), "dd MMM yyyy") === day
+              format(new Date(schedule.officeOn), "dd MMM yyyy") === day.date
           );
-          if (filtered.length > 0)
+          if (filtered.length > 0) {
+            day.officeCount++;
             rowDetails.push(
               <div
-                className="col cell selected"
-                onClick={() => this.deleteSchedule(staff.id, day)}
+                className="col calendar cell selected"
+                onClick={() => this.deleteSchedule(staff.id, day.date)}
               >
                 {" "}
                 Office{" "}
               </div>
             );
-          else
+          } else
             rowDetails.push(
               <div
                 className="col cell"
-                onClick={() => this.addSchedule(staff.id, day)}
+                onClick={() => this.addSchedule(staff.id, day.date)}
               >
                 {" "}
                 Home{" "}
@@ -154,6 +171,11 @@ class Cal extends React.Component {
 
           return day;
         });
+        console.log("so the count is", this.daysOfWeek);
+        const newDailyCount = this.daysOfWeek.map((day) => day.officeCount);
+        console.log("so the count is", this.daysOfWeek);
+
+        this.dailyCount = newDailyCount;
 
         return (
           <div className="row" key={staff.id}>
@@ -216,7 +238,10 @@ class Cal extends React.Component {
       <div className="calendar">
         {this.renderHeader()}
         {this.renderDays()}
-        {this.renderSchedules()}
+        {/* {this.renderDailyCount()} */}
+        <div style={{ maxHeight: "600px", overflow: "auto" }}>
+          {this.renderSchedules()}
+        </div>
       </div>
     );
   }
