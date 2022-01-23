@@ -1,7 +1,6 @@
 import React from "react";
-// import addMonths from 'date-fns/addMonths'
 import { ImHome, ImOffice } from "react-icons/im";
-
+import { api } from "./components/constants/api";
 import {
   endOfWeek,
   addDays,
@@ -12,6 +11,9 @@ import {
   addWeeks,
   subWeeks,
 } from "date-fns";
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
+
 const axios = require("axios");
 
 class Cal extends React.Component {
@@ -23,22 +25,18 @@ class Cal extends React.Component {
     allStaff: [],
     staffSchedule: [],
     isScheduleLoading: true,
+    showDialog: false,
   };
-  dailyCount = [2, 0, 0, 0, 0, 0, 0];
-
+  dailyCount = [];
+  lastUpdatedStaffSchedule = {};
   componentDidMount() {
     this.loadStaff();
     this.loadStaffSchedule();
   }
 
   async loadStaff() {
-    // const url = api.staffApi + "/staffList";
-    const url = `${process.env.REACT_APP_API_URL}/api/staff/staffList`;
-
+    const url = `${api.staffApi}/staffList`;
     let resp = await axios.get(url, {});
-    // allStaff = resp.data;
-    console.log(resp.data);
-    // this.allStaff = resp.data;
     this.setState({
       allStaff: resp.data,
       isLoading: false,
@@ -46,18 +44,16 @@ class Cal extends React.Component {
   }
 
   async loadStaffSchedule(dateFrom, dateTo) {
-    // const url = api.staffApi + "/staffList";
-    const url = `${process.env.REACT_APP_API_URL}/api/staff/staffSchedule`;
-
+    const url = `${api.staffApi}/staffSchedule`;
     let resp = await axios.get(url, { dateFrom, dateTo });
-    // allStaff = resp.data;
-    // this.allStaff = resp.data;
+
     this.setState({
       staffSchedule: resp.data,
     });
   }
 
   daysOfWeek = [];
+
   renderHeader() {
     const dateFormat = "yyyy";
     const weekDateFormat = "dd MMMM";
@@ -113,27 +109,12 @@ class Cal extends React.Component {
     return <div className="row blue">{days}</div>;
   }
 
-  renderDailyCount() {
-    const dayCount = [];
-    dayCount.push(<div className="col col-start">-</div>);
-
-    for (let i = 0; i < 7; i++) {
-      dayCount.push(
-        <div className="col col-center" key={i}>
-          {this.dailyCount[i]}
-        </div>
-      );
-    }
-
-    return <div className="row blue">{dayCount}</div>;
-  }
   renderSchedules() {
-    // const allStaff2 = ["Bruce", "Clark", "Diana"];
-    console.log("Before calling load staff in schedule");
-    // this.loadStaff();
+    //  console.log("Before calling load staff in schedule");
 
     let staffSchedules = [];
-    console.log("is the stage loading?", this.state.isLoading);
+    // console.log("is the stage loading?", this.state.isLoading);
+    let i = 1;
     if (!this.state.isLoading) {
       staffSchedules = this.state.allStaff.map((staff) => {
         let rowDetails = [];
@@ -142,7 +123,7 @@ class Cal extends React.Component {
           <div className="col nameCol col-start">{staff.name}</div>
         );
 
-        console.log("now in days of week", this.state.staffSchedule);
+        // console.log("now in days of week", this.state.staffSchedule);
 
         this.daysOfWeek.map((day) => {
           let filtered = this.state.staffSchedule.filter(
@@ -155,7 +136,9 @@ class Cal extends React.Component {
             rowDetails.push(
               <div
                 className="col calendar cell selected wfo"
-                onClick={() => this.deleteSchedule(staff.id, day.date)}
+                onClick={() =>
+                  this.deleteSchedule(staff.id, day.date, staff.name)
+                }
               >
                 {" "}
                 <ImOffice /> Office{" "}
@@ -165,7 +148,7 @@ class Cal extends React.Component {
             rowDetails.push(
               <div
                 className="col cell wfh"
-                onClick={() => this.addSchedule(staff.id, day.date)}
+                onClick={() => this.addSchedule(staff.id, day.date, staff.name)}
               >
                 <ImHome /> Home{" "}
               </div>
@@ -173,9 +156,8 @@ class Cal extends React.Component {
 
           return day;
         });
-        console.log("so the count is", this.daysOfWeek);
+        // console.log("so the count is", this.daysOfWeek);
         const newDailyCount = this.daysOfWeek.map((day) => day.officeCount);
-        console.log("so the count is", this.daysOfWeek);
 
         this.dailyCount = newDailyCount;
 
@@ -203,29 +185,54 @@ class Cal extends React.Component {
       </div>,
     ];
     staffSchedules = [dayCountRow, ...staffSchedules];
-    console.log("calling me -", staffSchedules);
+    // console.log("calling me -", staffSchedules);
     return <div className="body">{staffSchedules}</div>;
-
-    // return <div className="body">ss</div>;
   }
 
-  addSchedule = async (staffId, officeOn) => {
-    console.log("add now", staffId, officeOn);
-    const url = `${process.env.REACT_APP_API_URL}/api/staff/addSchedule`;
+  addSchedule = async (staffId, officeOn, staffName) => {
+    // console.log("add now", staffId, officeOn);
+
+    if (!this.checkLastUpdatedStaff(staffName)) return; //check for accidental update
+    const url = `${api.staffApi}/addSchedule`;
+
     let resp = await axios.post(url, { staffId, officeOn });
-    console.log("response ", resp.data);
-    //call reload schedule
+    this.lastUpdatedStaffSchedule = {
+      name: staffName,
+      staffid: staffId,
+      officeOn: officeOn,
+      action: "ADD",
+    };
     this.loadStaffSchedule();
   };
 
-  deleteSchedule = async (staffId, officeOn) => {
-    console.log("remove now", staffId, officeOn);
-    const url = `${process.env.REACT_APP_API_URL}/api/staff/deleteSchedule`;
+  deleteSchedule = async (staffId, officeOn, staffName) => {
+    if (!this.checkLastUpdatedStaff(staffName)) return; //check for accidental update
+
+    // console.log("remove now", staffId, officeOn);
+    const url = `${api.staffApi}/deleteSchedule`;
     let resp = await axios.post(url, { staffId, officeOn });
-    console.log("response ", resp.data);
-    //call reload schedule
+    // console.log("response ", resp.data);
+    this.lastUpdatedStaffSchedule = {
+      name: staffName,
+      staffid: staffId,
+      officeOn: officeOn,
+      action: "REMOVE",
+    };
     this.loadStaffSchedule();
   };
+
+  checkLastUpdatedStaff = (staffName) => {
+    if (
+      this.lastUpdatedStaffSchedule.name !== undefined &&
+      staffName !== this.lastUpdatedStaffSchedule.name
+    ) {
+      this.handleShow();
+      return false;
+    }
+    return true;
+  };
+
+  // Todo: doReverseLastUpdate
 
   nextMonth = () => {
     this.setState({
@@ -250,11 +257,41 @@ class Cal extends React.Component {
       currentWeek: subWeeks(this.state.currentWeek, 1),
     });
   };
+  handleClose = () =>
+    this.setState({
+      showDialog: false,
+    });
+
+  handleYes = () => {
+    this.lastUpdatedStaffSchedule = {};
+    this.setState({
+      showDialog: false,
+    });
+  };
+
+  handleShow = () =>
+    this.setState({
+      showDialog: true,
+    });
 
   render() {
     return (
       <div className="calendar">
         <div className="App-header">who is in office ?</div>
+        <Modal show={this.state.showDialog} onHide={this.handleClose}>
+          <Modal.Body>
+            You have previously updated for {this.lastUpdatedStaffSchedule.name}
+            ,<br></br> allow update for different staff?
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={this.handleClose}>
+              No
+            </Button>
+            <Button variant="primary" onClick={this.handleYes}>
+              Yes
+            </Button>
+          </Modal.Footer>
+        </Modal>
         {this.renderHeader()}
         {this.renderDays()}
         {/* {this.renderDailyCount()} */}
