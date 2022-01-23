@@ -154,7 +154,7 @@ class Cal extends React.Component {
             day.officeCount++;
             rowDetails.push(
               <div
-                className="col calendar cell selected"
+                className="col calendar cell selected wfo"
                 onClick={() => this.deleteSchedule(staff.id, day.date)}
               >
                 {" "}
@@ -164,7 +164,7 @@ class Cal extends React.Component {
           } else
             rowDetails.push(
               <div
-                className="col cell"
+                className="col cell wfh"
                 onClick={() => this.addSchedule(staff.id, day.date)}
               >
                 <ImHome /> Home{" "}
@@ -180,13 +180,29 @@ class Cal extends React.Component {
         this.dailyCount = newDailyCount;
 
         return (
-          <div className="row" key={staff.id}>
+          <div className="row " key={staff.id}>
             {rowDetails}
           </div>
         );
       });
     }
 
+    const dayCount = [];
+    dayCount.push(<div className="col"></div>);
+
+    for (let i = 0; i < 7; i++) {
+      dayCount.push(
+        <div className="col" key={i}>
+          ({this.dailyCount[i]})
+        </div>
+      );
+    }
+    let dayCountRow = [
+      <div className="row" key={1}>
+        {dayCount}
+      </div>,
+    ];
+    staffSchedules = [dayCountRow, ...staffSchedules];
     console.log("calling me -", staffSchedules);
     return <div className="body">{staffSchedules}</div>;
 

@@ -126,9 +126,11 @@ main {
   color: white;
 }
 
-.weekend {
-  background-color: rgb(244, 235, 167);
+.wfh {
   color: rgb(143, 6, 6);
+}
+.wfo {
+  color: rgb(65, 88, 28);
 }
 
 .nameCol {

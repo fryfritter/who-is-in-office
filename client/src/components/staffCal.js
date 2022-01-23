@@ -139,12 +139,12 @@ const StaffCal = () => {
         console.log(filtered);
         if (filtered.length > 0)
           rowDetails.push(
-            <div className="col cell selected">
+            <div className="col cell selected wfo">
               {" "}
               <ImOffice /> Office{" "}
             </div>
           );
-        else rowDetails.push(<div className="col cell"> Home </div>);
+        else rowDetails.push(<div className="col cell wfh"> Home </div>);
 
         return day;
       });
