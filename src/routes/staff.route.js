@@ -6,6 +6,10 @@ router.get("/staffList", async (req, res) => {
   try {
     console.log("Staff Route Get all");
     const staff = await db.staff.findAll({
+      order: [
+        // Will escape title and validate DESC against a list of valid direction parameters
+        ["name"],
+      ],
       attributes: ["name", "id"],
     });
     res.json(staff);
