@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-// import addMonths from 'date-fns/addMonths'
 import { api } from "./constants/api";
+import { ImHome, ImOffice } from "react-icons/im";
 
 import {
   startOfMonth,
@@ -138,7 +138,12 @@ const StaffCal = () => {
         );
         console.log(filtered);
         if (filtered.length > 0)
-          rowDetails.push(<div className="col cell selected"> Office </div>);
+          rowDetails.push(
+            <div className="col cell selected">
+              {" "}
+              <ImOffice /> Office{" "}
+            </div>
+          );
         else rowDetails.push(<div className="col cell"> Home </div>);
 
         return day;

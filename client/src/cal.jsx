@@ -1,5 +1,6 @@
 import React from "react";
 // import addMonths from 'date-fns/addMonths'
+import { ImHome, ImOffice } from "react-icons/im";
 
 import {
   endOfWeek,
@@ -137,7 +138,9 @@ class Cal extends React.Component {
       staffSchedules = this.state.allStaff.map((staff) => {
         let rowDetails = [];
 
-        rowDetails.push(<div className="col  col-start">{staff.name}</div>);
+        rowDetails.push(
+          <div className="col nameCol col-start">{staff.name}</div>
+        );
 
         console.log("now in days of week", this.state.staffSchedule);
 
@@ -155,7 +158,7 @@ class Cal extends React.Component {
                 onClick={() => this.deleteSchedule(staff.id, day.date)}
               >
                 {" "}
-                Office{" "}
+                <ImOffice /> Office{" "}
               </div>
             );
           } else
@@ -164,8 +167,7 @@ class Cal extends React.Component {
                 className="col cell"
                 onClick={() => this.addSchedule(staff.id, day.date)}
               >
-                {" "}
-                Home{" "}
+                <ImHome /> Home{" "}
               </div>
             );
 
@@ -236,6 +238,7 @@ class Cal extends React.Component {
   render() {
     return (
       <div className="calendar">
+        <div className="App-header">who is in office ?</div>
         {this.renderHeader()}
         {this.renderDays()}
         {/* {this.renderDailyCount()} */}
