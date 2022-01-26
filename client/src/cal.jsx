@@ -89,7 +89,6 @@ class Cal extends React.Component {
     this.daysOfWeek = []; //reset days of week details
 
     const days = [];
-
     let startDate = startOfWeek(this.state.currentWeek);
 
     days.push(<div className="col col-start">Staff Name</div>);
@@ -170,14 +169,28 @@ class Cal extends React.Component {
     }
 
     const dayCount = [];
-    dayCount.push(<div className="col"></div>);
+    let maxStaffCap = Math.floor(this.state.allStaff.length / 2);
+    dayCount.push(
+      <div className="col">
+        Staff : {this.state.allStaff.length} | Max :{maxStaffCap}
+      </div>
+    );
 
     for (let i = 0; i < 7; i++) {
-      dayCount.push(
-        <div className="col" key={i}>
-          ({this.dailyCount[i]})
-        </div>
-      );
+      let isExceedCap = this.dailyCount[i] >= maxStaffCap;
+      if (isExceedCap) {
+        dayCount.push(
+          <div className="col red" key={i}>
+            ({this.dailyCount[i]})
+          </div>
+        );
+      } else {
+        dayCount.push(
+          <div className="col" key={i}>
+            ({this.dailyCount[i]})
+          </div>
+        );
+      }
     }
     let dayCountRow = [
       <div className="row" key={1}>

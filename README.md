@@ -57,11 +57,11 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 ## Run `npx sequelize init:migrations` to generate migration scripts
 
-## Run `npx sequelize model:generate --name Exercise` to generate DB model
+## Run `npx sequelize model:generate --name staff` to generate DB model
 
 ## Run `npx sequelize init:seeders` to generate seeder scripts
 
-## Run `npx sequelize seed:generate --name Exercise` to generate the seed file
+## Run `npx sequelize seed:generate --name staff` to generate the seed file
 
 ## Run `npx sequelize db:seed:all` to run the seed file
 
@@ -74,20 +74,3 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 ### `npm install jsonwebtoken`
 
 ### `npm install bcryptjs`
-
-### Create the following Database
-
-development: {
-username: "postgres",
-password: null,
-database: "capstone_workout_randomiser_dev",
-host: "127.0.0.1",
-dialect: "postgres",
-},
-test: {
-username: "postgres",
-password: null,
-database: "capstone_workout_randomiser_dev_test",
-host: "127.0.0.1",
-dialect: "postgres",
-},

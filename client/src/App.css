@@ -126,6 +126,11 @@ main {
   color: white;
 }
 
+.red {
+  background-color: rgb(255, 0, 0);
+  color: white;
+}
+
 .wfh {
   color: rgb(143, 6, 6);
 }

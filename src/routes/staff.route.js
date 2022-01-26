@@ -34,8 +34,6 @@ router.get("/staffSchedule", async (req, res) => {
 
 router.post("/addSchedule", async (req, res, next) => {
   try {
-    // let exerciseId = req.params.exerciseId;
-    // let userId = req.user.userId;
     console.log("m calling add schedule");
     const { staffId, officeOn } = req.body;
     const staSchedule = { staffId, officeOn };
@@ -48,8 +46,6 @@ router.post("/addSchedule", async (req, res, next) => {
 
 router.post("/deleteSchedule", async (req, res, next) => {
   try {
-    // let exerciseId = req.params.exerciseId;
-    // let userId = req.user.userId;
     const { staffId, officeOn } = req.body;
     console.log("m calling delete schedule");
     db.staffSchedule.destroy({

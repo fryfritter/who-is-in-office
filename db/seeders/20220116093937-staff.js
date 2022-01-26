@@ -19,11 +19,11 @@ const staffArr = [
   },
   {
     groupid: 1,
-    name: "Benny Ou Junsheng",
+    name: "Benny Ou",
   },
   {
     groupid: 1,
-    name: "Beryl Kwok Liwen",
+    name: "Beryl Kwok",
   },
   {
     groupid: 1,
@@ -35,7 +35,7 @@ const staffArr = [
   },
   {
     groupid: 1,
-    name: "Delon Wong Her Laang",
+    name: "Delon Wong",
   },
   {
     groupid: 1,
@@ -55,7 +55,7 @@ const staffArr = [
   },
   {
     groupid: 1,
-    name: "Evelyn Lee Mei Sin",
+    name: "Evelyn Lee",
   },
   {
     groupid: 1,
@@ -71,11 +71,11 @@ const staffArr = [
   },
   {
     groupid: 1,
-    name: "Ho Wee Kim Eric",
+    name: "Eric Ho",
   },
   {
     groupid: 1,
-    name: "Hong Ching Hoi Andy",
+    name: "Andy Hong",
   },
   {
     groupid: 1,
@@ -83,7 +83,7 @@ const staffArr = [
   },
   {
     groupid: 1,
-    name: "Jacky Lian Weirong",
+    name: "Jacky Lian",
   },
   {
     groupid: 1,
@@ -159,7 +159,7 @@ const staffArr = [
   },
   {
     groupid: 1,
-    name: "Melvin Loo Jian Liang",
+    name: "Melvin Loo",
   },
   {
     groupid: 1,
@@ -175,7 +175,7 @@ const staffArr = [
   },
   {
     groupid: 1,
-    name: "Selwyn Yeow Zheng Yu",
+    name: "Selwyn Yeow",
   },
   {
     groupid: 1,
